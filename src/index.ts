@@ -1,6 +1,6 @@
 import Discord from 'discord.js';
 import Commands from './commands/index';
-import { Command } from './commands/command';
+import { Command } from './types/command';
 
 // eslint-disable-next-line import/newline-after-import, import/order
 import dotenv = require('dotenv');
