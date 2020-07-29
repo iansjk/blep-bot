@@ -8,7 +8,7 @@ import Triggers from './triggers/index';
 import dotenv = require('dotenv');
 dotenv.config();
 
-const REQUIRED_ENV_VARS = ['PREFIX', 'DISCORD_TOKEN'];
+const REQUIRED_ENV_VARS = ['COMMAND_PREFIX', 'DISCORD_TOKEN'];
 REQUIRED_ENV_VARS.forEach((envVar) => {
   if (!Object.prototype.hasOwnProperty.call(process.env, envVar)) {
     throw new Error(`Required environment variable ${envVar} not set`);
@@ -22,11 +22,11 @@ client.on('ready', () => {
   Commands.forEach((CommandConstructor) => {
     const command: Command = new CommandConstructor(client);
     commands.set(command.name, command);
-    console.info(`Registered command: ${process.env.PREFIX}${command.name} => ${CommandConstructor.name}`);
+    console.info(`Registered command: ${process.env.COMMAND_PREFIX}${command.name} => ${CommandConstructor.name}`);
     if (command.aliases) {
       command.aliases.forEach((alias) => {
         if (commands.has(alias)) {
-          throw new Error(`Command conflict: attempted to register ${process.env.PREFIX}${alias} but it already exists`);
+          throw new Error(`Command conflict: attempted to register ${process.env.COMMAND_PREFIX}${alias} but it already exists`);
         }
         commands.set(alias, command);
       });
@@ -41,8 +41,8 @@ client.on('ready', () => {
 });
 
 client.on('message', (message) => {
-  if (!message.author.bot && message.content.startsWith(process.env.PREFIX)) {
-    const [command, ...args] = message.content.slice(process.env.PREFIX.length).trim().split(' ');
+  if (!message.author.bot && message.content.startsWith(process.env.COMMAND_PREFIX)) {
+    const [command, ...args] = message.content.slice(process.env.COMMAND_PREFIX.length).trim().split(' ');
     const handler = commands.get(command);
     if (handler) {
       handler.execute(message, args);
@@ -59,3 +59,13 @@ client.on('message', (message) => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
+process.on('SIGINT', () => {
+  console.error('SIGINT received, gracefully shutting down...');
+  commands.forEach((command) => {
+    if ('shutdown' in command) {
+      command.shutdown();
+    }
+  });
+  process.exit();
+});

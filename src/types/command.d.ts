@@ -6,5 +6,6 @@ export interface Command {
   usage: string;
   description: string;
   subcommands?: Command[];
-  execute: (message: Message, args: string[]) => Promise<Message | void> | void
+  execute: (message: Message, args: string[]) => Promise<Message | void> | void;
+  shutdown?: () => void
 }

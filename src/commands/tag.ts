@@ -1,7 +1,11 @@
 import { Command } from 'command';
 import { Client, Message } from 'discord.js';
+import fs from 'fs';
+import path from 'path';
 import { Tag } from 'tag';
 import { error, success } from '../common';
+
+const tagFilePath = path.join(__dirname, '../data/tags.json');
 
 export default class TagCommand implements Command {
   name = 'tag';
@@ -35,6 +39,9 @@ export default class TagCommand implements Command {
   subcommandNames: Set<string>;
 
   constructor(client: Client) {
+    if (fs.existsSync(tagFilePath)) {
+      this.tags = JSON.parse(fs.readFileSync(tagFilePath, { encoding: 'utf-8' }), this.reviver);
+    }
     [...client.guilds.cache.values()].forEach((guild) => {
       const guildTagMap = this.tags.get(guild.id);
       if (!guildTagMap) {
@@ -103,5 +110,32 @@ export default class TagCommand implements Command {
 
   isValidTagName(tagName: string): boolean {
     return !(this.subcommandNames.has(tagName));
+  }
+
+  shutdown(): void {
+    fs.writeFileSync(tagFilePath, JSON.stringify(this.tags, this.replacer), { encoding: 'utf-8' });
+  }
+
+  // encode Map as { dataType: 'Map', value: <array of 2-arrays> }
+  // eslint-disable-next-line class-methods-use-this
+  replacer(_: string, value: any): any {
+    if (value instanceof Map) {
+      return {
+        dataType: 'Map',
+        value: [...value.entries()],
+      };
+    }
+    return value;
+  }
+
+  // decode JSONified Maps produced by replacer()
+  // eslint-disable-next-line class-methods-use-this
+  reviver(_: string, value: any) {
+    if (typeof value === 'object' && value !== null) {
+      if (value.dataType === 'Map') {
+        return new Map(value.value);
+      }
+    }
+    return value;
   }
 }
