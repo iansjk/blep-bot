@@ -1,6 +1,8 @@
 import Discord from 'discord.js';
+import type { Trigger } from 'trigger';
+import type { Command } from 'command';
 import Commands from './commands/index';
-import { Command } from './types/command';
+import Triggers from './triggers/index';
 
 // eslint-disable-next-line import/newline-after-import, import/order
 import dotenv = require('dotenv');
@@ -14,6 +16,7 @@ REQUIRED_ENV_VARS.forEach((envVar) => {
 });
 const client = new Discord.Client();
 const commands = new Map<string, Command>();
+const triggers = new Map<RegExp, Trigger>();
 
 client.on('ready', () => {
   Commands.forEach((CommandConstructor) => {
@@ -29,6 +32,11 @@ client.on('ready', () => {
       });
     }
   });
+  Triggers.forEach((TriggerConstructor) => {
+    const trigger: Trigger = new TriggerConstructor();
+    triggers.set(trigger.condition, trigger);
+    console.info(`Registered trigger ${TriggerConstructor.name}`);
+  });
   console.info('blep-bot ready!');
 });
 
@@ -41,6 +49,12 @@ client.on('message', (message) => {
     } else {
       message.channel.send(`❌ Unrecognized command \`${command}\`.`);
     }
+  } else {
+    [...triggers.keys()].forEach((regex) => {
+      if (regex.test(message.content)) {
+        triggers.get(regex).execute(message);
+      }
+    });
   }
 });
 
