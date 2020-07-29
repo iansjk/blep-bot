@@ -20,7 +20,7 @@ const triggers = new Map<RegExp, Trigger>();
 
 client.on('ready', () => {
   Commands.forEach((CommandConstructor) => {
-    const command: Command = new CommandConstructor();
+    const command: Command = new CommandConstructor(client);
     commands.set(command.name, command);
     console.info(`Registered command: ${process.env.PREFIX}${command.name} => ${CommandConstructor.name}`);
     if (command.aliases) {
