@@ -1,8 +1,7 @@
 module.exports = {
-  apps : [{
+  apps: [{
     name: 'blep-bot',
     script: 'npm',
-    args: 'start'
-  }]
+    args: 'start',
+  }],
 };
-
