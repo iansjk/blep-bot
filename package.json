@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "debug": "node --nolazy --inspect -r ts-node/register src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "yarn install && node -r ts-node/register src/index.ts"
   },
   "repository": {
     "type": "git",
