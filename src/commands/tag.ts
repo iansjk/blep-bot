@@ -29,6 +29,18 @@ export default class TagCommand implements Command {
       description: 'Displays the owner of [tag-name].',
       execute: this.getTagOwner,
     },
+    {
+      name: 'edit',
+      usage: 'edit [tag-name] [new-content]',
+      description: 'If you are the owner of [tag-name], replaces its contents with [new-content].',
+      execute: this.editTag,
+    },
+    {
+      name: 'delete',
+      usage: 'delete [tag-name]',
+      description: 'Deletes [tag-name] if you are its owner.',
+      execute: this.deleteTag,
+    },
   ];
 
   // guild.id -> tag.name -> Tag
@@ -40,7 +52,9 @@ export default class TagCommand implements Command {
 
   constructor(client: Client) {
     if (fs.existsSync(tagFilePath)) {
+      console.debug(`Loading tag data from ${tagFilePath}`);
       this.tags = JSON.parse(fs.readFileSync(tagFilePath, { encoding: 'utf-8' }), this.reviver);
+      console.debug('Successfully loaded tag data.');
     }
     [...client.guilds.cache.values()].forEach((guild) => {
       const guildTagMap = this.tags.get(guild.id);
@@ -93,6 +107,42 @@ export default class TagCommand implements Command {
     }
   }
 
+  editTag(message: Message, args: string[]): void {
+    const [tagName, ...rest] = args;
+    const tagMap = this.tags.get(message.guild.id);
+    const tag = tagMap.get(tagName);
+    if (!tag) {
+      error(message, `The tag \`${tagName}\` does not exist.`);
+    } else if (message.author.id !== tag.ownerId) {
+      error(message, 'You are not the owner of this tag.');
+    } else {
+      const newContent = rest.join(' ').trim();
+      if (newContent.length === 0) {
+        error(message, 'No content specified for tag.');
+      } else {
+        tag.content = newContent;
+        success(message, `Successfully edited tag \`${tagName}\`.`);
+      }
+    }
+  }
+
+  deleteTag(message: Message, args: string[]): void {
+    const [tagName, ...rest] = args;
+    if (rest.length > 0) {
+      error(message, 'Too many arguments.');
+    }
+    const tagMap = this.tags.get(message.guild.id);
+    const tag = tagMap.get(tagName);
+    if (!tag) {
+      error(message, `The tag \`${tagName}\` does not exist.`);
+    } else if (message.author.id !== tag.ownerId) {
+      error(message, 'You are not the owner of this tag.');
+    } else {
+      tagMap.delete(tagName);
+      success(message, `Successfully deleted tag \`${tagName}\`.`);
+    }
+  }
+
   getTagOwner(message: Message, args: string[]): void {
     const [tagName, ...rest] = args;
     if (rest.length > 0) {
@@ -113,7 +163,9 @@ export default class TagCommand implements Command {
   }
 
   shutdown(): void {
+    console.debug(`Shutting down, writing tag data to ${tagFilePath}`);
     fs.writeFileSync(tagFilePath, JSON.stringify(this.tags, this.replacer), { encoding: 'utf-8' });
+    console.debug('Tag data saved.');
   }
 
   // encode Map as { dataType: 'Map', value: <array of 2-arrays> }
