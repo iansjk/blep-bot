@@ -62,7 +62,9 @@ client.login(process.env.DISCORD_TOKEN);
 
 process.on('SIGINT', () => {
   console.error('SIGINT received, gracefully shutting down...');
-  commands.forEach((command) => {
+  // make sure to run only once per unique command object
+  // (have to deduplicate values() due to command aliases)
+  [...new Set([...commands.values()])].forEach((command) => {
     if ('shutdown' in command) {
       command.shutdown();
     }
