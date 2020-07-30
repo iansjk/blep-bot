@@ -164,6 +164,7 @@ export default class TagCommand implements Command {
 
   shutdown(): void {
     console.debug(`Shutting down, writing tag data to ${tagFilePath}`);
+    fs.mkdirSync(path.join(tagFilePath, '..'), { recursive: true });
     fs.writeFileSync(tagFilePath, JSON.stringify(this.tags, this.replacer), { encoding: 'utf-8' });
     console.debug('Tag data saved.');
   }
