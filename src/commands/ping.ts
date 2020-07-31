@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
-import type { Command } from '../types/command';
+import Command from '../types/command';
 
-export default class PingCommand implements Command {
+export default class PingCommand extends Command {
     name = 'ping';
 
     usage = 'ping';
