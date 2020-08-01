@@ -1,6 +1,6 @@
 import { GuildChannel, Message } from 'discord.js';
 import { error, splitWhitespaceNTimes } from '../common';
-import { Command, BlepBotClient } from './internal';
+import { BlepBotCommand, BlepBotClient } from './internal';
 
 export default class BlepBotMessageHandler {
   client: BlepBotClient;
@@ -14,8 +14,8 @@ export default class BlepBotMessageHandler {
       const commandString = message.content.slice(this.client.commandPrefix.length);
       // eslint-disable-next-line prefer-const
       let [command, argString] = splitWhitespaceNTimes(commandString, 1);
-      let handler: Command = this.client.commands.get(command);
-      let parentHandler: Command;
+      let handler: BlepBotCommand = this.client.commands.get(command);
+      let parentHandler: BlepBotCommand;
       if (!handler) {
         error(message, `Unrecognized command \`${command}\`.`);
       } else if (!(message.channel instanceof GuildChannel) && handler.guildOnly) {

@@ -1,14 +1,14 @@
 import { Client } from 'discord.js';
 import { Db, MongoClient } from 'mongodb';
 import { Trigger } from 'trigger';
-import { BlepBotMessageHandler, Command, HelpCommand } from './internal';
+import { BlepBotMessageHandler, BlepBotCommand, HelpCommand } from './internal';
 
 export default class BlepBotClient extends Client {
   commandPrefix: string;
 
   private messageHandler: BlepBotMessageHandler;
 
-  commands = new Map<string, Command>();
+  commands = new Map<string, BlepBotCommand>();
 
   triggers = new Map<RegExp, Trigger>();
 
@@ -54,7 +54,7 @@ export default class BlepBotClient extends Client {
     });
   }
 
-  async loadCommand(CommandConstructor: new (c: BlepBotClient) => Command): Promise<void> {
+  async loadCommand(CommandConstructor: new (c: BlepBotClient) => BlepBotCommand): Promise<void> {
     await this.ready;
     const command = new CommandConstructor(this);
     if (this.commands.has(command.name)) {

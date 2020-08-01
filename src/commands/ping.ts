@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
-import { Command } from '../client/internal';
+import { BlepBotCommand } from '../client/internal';
 
-export default class PingCommand extends Command {
+export default class PingCommand extends BlepBotCommand {
     name = 'ping';
 
     usage = 'ping';
