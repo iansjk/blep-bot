@@ -29,7 +29,7 @@ export default class TimeForCommand extends BlepBotCommand {
       execute: this.setTimezone,
       arguments: [
         {
-          name: 'timezone',
+          name: 'cityName',
           infinite: true,
         },
       ],
