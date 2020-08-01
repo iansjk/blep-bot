@@ -12,12 +12,12 @@ export default class TagCommand extends Command {
 
   usage = 'tag [tag-name]';
 
-  description = 'Retrieves the tag [tag-name].';
+  description = 'Retrieves the tag `[tag-name]`.';
 
   subcommands = [
     {
       name: 'create',
-      usage: 'create [tag-name] [content]',
+      usage: `${this.name} create [tag-name] [content]`,
       description: 'Creates a new tag named `[tag-name]` containing `[content]`.',
       execute: this.createTag,
       arguments: [
@@ -33,8 +33,8 @@ export default class TagCommand extends Command {
     },
     {
       name: 'owner',
-      usage: 'owner [tag-name]',
-      description: 'Displays the owner of [tag-name].',
+      usage: `${this.name} owner [tag-name]`,
+      description: 'Displays the owner of `[tag-name]`.',
       execute: this.getTagOwner,
       arguments: [
         {
@@ -45,8 +45,8 @@ export default class TagCommand extends Command {
     },
     {
       name: 'edit',
-      usage: 'edit [tag-name] [new-content]',
-      description: 'If you are the owner of [tag-name], replaces its contents with [new-content].',
+      usage: `${this.name} edit [tag-name] [new-content]`,
+      description: 'If you are the owner of `[tag-name]`, replaces its contents with `[new-content]`.',
       execute: this.editTag,
       arguments: [
         {
@@ -61,8 +61,8 @@ export default class TagCommand extends Command {
     },
     {
       name: 'delete',
-      usage: 'delete [tag-name]',
-      description: 'Deletes [tag-name] if you are its owner.',
+      usage: `${this.name} delete [tag-name]`,
+      description: 'Deletes `[tag-name]` if you are its owner.',
       execute: this.deleteTag,
       arguments: [
         {
