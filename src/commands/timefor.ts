@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import cityTimezones from 'city-timezones';
 import { Collection } from 'mongodb';
 import { BlepBotClient, BlepBotCommand } from '../client/internal';
-import { error, success } from '../common';
+import { error, success, choose } from '../common';
 
 export default class TimeForCommand extends BlepBotCommand {
   name = 'timefor';
@@ -68,12 +68,21 @@ export default class TimeForCommand extends BlepBotCommand {
     return message.channel.send(`It is **${momentObj.format('h:mm A')}** in \`${user.tag}\`'s timezone (\`${userTimezone.timezone}\`)`);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async setTimezone(message: Message, args: string[]): Promise<void> {
     const city = args[0];
-    const result = cityTimezones.lookupViaCity(city)[0];
-    if (!result) {
-      return error(message, `Couldn't find any results matching \`${city}\`.`);
+    const results = cityTimezones.lookupViaCity(city);
+    if (!results) {
+      return error(message, `Didn't find any cities matching \`${city}\`.`);
+    } else if (results.length > 9) {
+      return error(message, 'Your search returned 10+ results. Please refine your search.');
+    }
+    let result = results[0];
+    if (results.length > 1) {
+      const index = await choose(message, results.map((r) => `${r.city}, ${(r.province) ? `${r.province}, ` : ''}${r.country}`));
+      if (!index) {
+        return null;
+      }
+      result = results[index];
     }
     await this.userTimezones.updateOne({
       userId: message.author.id,

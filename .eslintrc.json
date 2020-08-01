@@ -21,7 +21,7 @@
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars-experimental": "error",
         "import/extensions": [
-            "error", 
+            "error",
             "ignorePackages",
             {
                 "js": "never",
@@ -29,6 +29,12 @@
                 "jsx": "never",
                 "ts": "never",
                 "tsx": "never"
+            }
+        ],
+        "no-else-return": [
+            "error",
+            {
+                "allowElseIf": true
             }
         ]
     },
