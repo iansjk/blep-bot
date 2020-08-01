@@ -41,7 +41,7 @@ export default class BlepBotMessageHandler {
         } else {
           let canExecute = true;
           const args = splitWhitespaceNTimes(argString, handler.arguments.length - 1);
-          handler.arguments.forEach((argument, i) => {
+          await Promise.all(handler.arguments.map(async (argument, i) => {
             if (!argument.optional && (!args[i] || args[i].length === 0)) {
               error(message, `Required argument \`${handler.arguments[i].name}\` was empty.`);
               canExecute = false;
@@ -52,14 +52,14 @@ export default class BlepBotMessageHandler {
                 canExecute = false;
               }
             } else if (argument.validator) {
-              const validationResult = argument.validator
+              const validationResult = await argument.validator
                 .apply(parentHandler || handler, [message, args[i]]);
               if (!validationResult.valid) {
                 error(message, validationResult.errorMessage);
                 canExecute = false;
               }
             }
-          });
+          }));
           if (canExecute) {
             handler.execute.apply(parentHandler || handler, [message, args]);
           }

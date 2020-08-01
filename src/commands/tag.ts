@@ -1,12 +1,9 @@
 import { Message } from 'discord.js';
-import fs from 'fs';
-import path from 'path';
+import { Collection } from 'mongodb';
 import { Tag } from 'tag';
 import { ValidationResult } from 'validationResult';
-import { Command, BlepBotClient } from '../client/internal';
-import { error, success } from '../common';
-
-const tagFilePath = path.join(__dirname, '../data/tags.json');
+import { BlepBotClient, Command } from '../client/internal';
+import { success } from '../common';
 
 export default class TagCommand extends Command {
   name = 'tag';
@@ -90,74 +87,74 @@ export default class TagCommand extends Command {
 
   guildOnly = true;
 
-  // guild.id -> tag.name -> Tag
-  tags: Map<string, Map<string, Tag>> = new Map<string, Map<string, Tag>>();
+  restrictedTagNames = new Set(['help', ...this.subcommands.map((command) => command.name)]);
 
-  restrictedTagNames = new Set(['help', [...this.subcommands.map((command) => command.name)]]);
+  tags: Collection<Tag>;
 
   constructor(client: BlepBotClient) {
     super(client);
-    if (fs.existsSync(tagFilePath)) {
-      console.debug(`Loading tag data from ${tagFilePath}`);
-      this.tags = JSON.parse(fs.readFileSync(tagFilePath, { encoding: 'utf-8' }), this.reviver);
-      console.debug('Successfully loaded tag data.');
-    }
-    [...client.guilds.cache.values()].forEach((guild) => {
-      const guildTagMap = this.tags.get(guild.id);
-      if (!guildTagMap) {
-        this.tags.set(guild.id, new Map<string, Tag>());
-      }
-    });
+    this.tags = client.db.collection('tags');
   }
 
-  execute(message: Message, args: string[]): void {
+  async execute(message: Message, args: string[]): Promise<void> {
     // TODO: pass tagArgs to tag content renderer
     // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
     const [tagName, ...tagArgs] = args;
-    const tag = this.tags.get(message.guild.id).get(tagName);
+    const tag = await this.tags.findOne({
+      guildId: message.guild.id,
+      name: tagName,
+    });
     message.channel.send(tag.content);
   }
 
-  createTag(message: Message, args: string[]): void {
+  async createTag(message: Message, args: string[]): Promise<void> {
     const [tagName, content] = args;
-    this.tags.get(message.guild.id).set(tagName, {
-      name: tagName,
+    await this.tags.insertOne({
+      guildId: message.guild.id,
       ownerId: message.author.id,
+      name: tagName,
       content,
     });
     success(message, `Created tag \`${tagName}\`.`);
   }
 
-  editTag(message: Message, args: string[]): void {
+  async editTag(message: Message, args: string[]): Promise<void> {
     const [tagName, newContent] = args;
-    const tag = this.tags.get(message.guild.id).get(tagName);
-    tag.content = newContent;
+    await this.tags.updateOne({
+      guildId: message.guild.id,
+      name: tagName,
+    }, {
+      $set: {
+        content: newContent,
+      },
+    });
     success(message, `Successfully edited tag \`${tagName}\`.`);
   }
 
-  deleteTag(message: Message, args: string[]): void {
+  async deleteTag(message: Message, args: string[]): Promise<void> {
     const tagName = args[0];
-    this.tags.get(message.guild.id).delete(tagName);
+    await this.tags.deleteOne({
+      guildId: message.guild.id,
+      name: tagName,
+    });
     success(message, `Successfully deleted tag \`${tagName}\`.`);
   }
 
-  getTagOwner(message: Message, args: string[]): void {
-    const [tagName, ...rest] = args;
-    if (rest.length > 0) {
-      error(message, 'Too many arguments.');
-    } else {
-      const tag = this.tags.get(message.guild.id).get(tagName);
-      if (!tag) {
-        error(message, `The tag \`${args[0]}\` does not exist.`);
-      } else {
-        const owner = message.guild.members.resolve(tag.ownerId).user;
-        message.channel.send(`Tag \`${tagName}\` is owned by \`${owner.tag}\``);
-      }
-    }
+  async getTagOwner(message: Message, args: string[]): Promise<void> {
+    const tagName = args[0];
+    const tag = await this.tags.findOne({
+      guildId: message.guild.id,
+      name: tagName,
+    });
+    const owner = message.guild.members.resolve(tag.ownerId).user;
+    message.channel.send(`Tag \`${tagName}\` is owned by \`${owner.tag}\``);
   }
 
-  tagExists(message: Message, tagName: string): ValidationResult {
-    const tag = this.tags.get(message.guild.id).get(tagName);
+  async tagExists(message: Message, tagName: string): Promise<ValidationResult> {
+    const tag = await this.tags.findOne({
+      guildId: message.guild.id,
+      name: tagName,
+    });
     if (!tag) {
       return {
         valid: false,
@@ -169,8 +166,11 @@ export default class TagCommand extends Command {
     };
   }
 
-  canEditTag(message: Message, tagName: string): ValidationResult {
-    const tag = this.tags.get(message.guild.id).get(tagName);
+  async canEditTag(message: Message, tagName: string): Promise<ValidationResult> {
+    const tag = await this.tags.findOne({
+      guildId: message.guild.id,
+      name: tagName,
+    });
     if (!tag) {
       return {
         valid: false,
@@ -188,8 +188,8 @@ export default class TagCommand extends Command {
     };
   }
 
-  isValidNewTagName(message: Message, newTagName: string): ValidationResult {
-    const response: ValidationResult = this.tagExists(message, newTagName);
+  async isValidNewTagName(message: Message, newTagName: string): Promise<ValidationResult> {
+    const response: ValidationResult = await this.tagExists(message, newTagName);
     if (response.valid) {
       return {
         valid: false,
@@ -206,13 +206,6 @@ export default class TagCommand extends Command {
     return {
       valid: true,
     };
-  }
-
-  shutdown(): void {
-    console.debug(`Shutting down, writing tag data to ${tagFilePath}`);
-    fs.mkdirSync(path.join(tagFilePath, '..'), { recursive: true });
-    fs.writeFileSync(tagFilePath, JSON.stringify(this.tags, this.replacer), { encoding: 'utf-8' });
-    console.debug('Tag data saved.');
   }
 
   // encode Map as { dataType: 'Map', value: <array of 2-arrays> }

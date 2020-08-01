@@ -1,4 +1,4 @@
-import { Client, Message } from 'discord.js';
+import { Message } from 'discord.js';
 import { ValidationResult } from 'validationResult';
 import BlepBotClient from './blepBotClient';
 
@@ -6,7 +6,7 @@ interface Argument {
   name: string,
   optional?: boolean, // default false
   infinite?: boolean, // default false
-  validator?(message: Message, value: string): ValidationResult
+  validator?(message: Message, value: string): ValidationResult | Promise<ValidationResult>
 }
 
 export default abstract class Command {
@@ -22,7 +22,7 @@ export default abstract class Command {
 
   arguments?: Argument[];
 
-  client?: Client;
+  client?: BlepBotClient;
 
   guildOnly? = false;
 

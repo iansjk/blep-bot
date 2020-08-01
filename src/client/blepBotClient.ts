@@ -22,6 +22,8 @@ export default class BlepBotClient extends Client {
 
   db: Db;
 
+  ready: Promise<void>;
+
   constructor(commandPrefix: string) {
     super();
     this.commandPrefix = commandPrefix;
@@ -34,33 +36,45 @@ export default class BlepBotClient extends Client {
       // (have to deduplicate values() due to command aliases)
       [...new Set([...this.commands.values()])].forEach((command) => {
         command.shutdown();
+        this.mongoClient.close();
       });
       process.exit();
     });
-    this.mongoClient.connect().then((client) => {
-      this.db = client.db(process.env.MONGODB_DBNAME);
-      console.log(`Connected to Mongo database "${this.db.databaseName}"`);
-    }).catch((e) => {
-      throw e;
+
+    this.ready = new Promise((resolve, reject) => {
+      this.mongoClient.connect().then((client) => {
+        this.db = client.db(process.env.MONGODB_DBNAME);
+        console.log(`Connected to Mongo database "${this.db.databaseName}"`);
+        resolve();
+      }).catch((e) => {
+        reject(e);
+      });
     });
   }
 
-  loadCommand(command: Command) {
+  async loadCommand(CommandConstructor: new (c: BlepBotClient) => Command): Promise<void> {
+    await this.ready;
+    const command = new CommandConstructor(this);
     if (this.commands.has(command.name)) {
       throw new Error(`Failed to register ${command.name} as a command with the same name is already registered.`);
     }
     this.commands.set(command.name, command);
+    console.debug(`Loaded command: ${this.commandPrefix}${command.name} => ${CommandConstructor.name}`);
     if (command.aliases) {
       command.aliases.forEach((alias) => {
         this.commands.set(alias, command);
+        console.debug(`Loaded alias: ${this.commandPrefix}${alias} => ${CommandConstructor.name}`);
       });
     }
   }
 
-  loadTrigger(trigger: Trigger) {
+  async loadTrigger(TriggerConstructor: new () => Trigger) {
+    await this.ready;
+    const trigger = new TriggerConstructor();
     if (this.triggers.has(trigger.condition)) {
       throw new Error(`Failed to register trigger ${trigger} as another trigger with the same regex is already registered.`);
     }
     this.triggers.set(trigger.condition, trigger);
+    console.debug(`Loaded trigger ${TriggerConstructor.name}`);
   }
 }
