@@ -79,7 +79,7 @@ export default class TimeForCommand extends BlepBotCommand {
     let result = results[0];
     if (results.length > 1) {
       const index = await choose(message, results.map((r) => `${r.city}, ${(r.province) ? `${r.province}, ` : ''}${r.country}`));
-      if (!index) {
+      if (index === null) {
         return null;
       }
       result = results[index];
