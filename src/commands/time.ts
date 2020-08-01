@@ -5,12 +5,12 @@ import { Collection } from 'mongodb';
 import { BlepBotClient, BlepBotCommand } from '../client/internal';
 import { error, success, choose } from '../common';
 
-export default class TimeForCommand extends BlepBotCommand {
-  name = 'timefor';
+export default class TimeCommand extends BlepBotCommand {
+  name = 'time';
 
-  aliases = ['tf'];
+  aliases = ['tf', 'tz'];
 
-  usage = 'timefor [user?]';
+  usage = 'time [user?]';
 
   description = 'Displays the local time for `[user]`, or your local time if `[user]` is empty.';
 

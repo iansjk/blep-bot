@@ -1,6 +1,6 @@
 import PingCommand from './ping';
 import TagCommand from './tag';
-import TimeForCommand from './timefor';
+import TimeForCommand from './time';
 
 const ALL = [
   PingCommand,
