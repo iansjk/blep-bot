@@ -91,6 +91,6 @@ export default class TimeForCommand extends BlepBotCommand {
     }, {
       upsert: true,
     });
-    return success(message, `I've set your timezone to \`${result.timezone}.\``);
+    return success(message, `I've set your timezone to \`${result.timezone}\`.`);
   }
 }
