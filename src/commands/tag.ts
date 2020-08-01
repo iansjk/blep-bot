@@ -3,7 +3,7 @@ import { Collection } from 'mongodb';
 import { Tag } from 'tag';
 import { ValidationResult } from 'validation-result';
 import { BlepBotClient, Command } from '../client/internal';
-import { success } from '../common';
+import { success, error } from '../common';
 
 export default class TagCommand extends Command {
   name = 'tag';
@@ -13,6 +13,18 @@ export default class TagCommand extends Command {
   usage = 'tag [tag-name]';
 
   description = 'Retrieves the tag `[tag-name]`.';
+
+  arguments = [
+    {
+      name: 'tagName',
+      validator: this.tagExists,
+    },
+    {
+      name: 'tagArgs',
+      optional: true,
+      infinite: true,
+    },
+  ];
 
   subcommands = [
     {
@@ -71,23 +83,23 @@ export default class TagCommand extends Command {
         },
       ],
     },
-  ];
-
-  arguments = [
     {
-      name: 'tagName',
-      validator: this.tagExists,
-    },
-    {
-      name: 'tagArgs',
-      optional: true,
-      infinite: true,
+      name: 'search',
+      usage: `${this.name} search [text-pattern]`,
+      description: 'Searches for tags matching `text-pattern`.',
+      execute: this.searchTags,
+      arguments: [
+        {
+          name: 'textPattern',
+          optional: true,
+        },
+      ],
     },
   ];
-
-  guildOnly = true;
 
   restrictedTagNames = new Set(['help', ...this.subcommands.map((command) => command.name)]);
+
+  guildOnly = true;
 
   tags: Collection<Tag>;
 
@@ -148,6 +160,27 @@ export default class TagCommand extends Command {
     });
     const owner = message.guild.members.resolve(tag.ownerId).user;
     message.channel.send(`Tag \`${tagName}\` is owned by \`${owner.tag}\``);
+  }
+
+  async searchTags(message: Message, args: string[]): Promise<void> {
+    const textPattern = args[0];
+    const query: any = {
+      guildId: message.guild.id,
+    };
+    if (textPattern) {
+      query.name = { $regex: textPattern, $options: 'i' };
+    }
+    const tags = await this.tags.find(query).toArray();
+    if (tags.length === 0) {
+      const errorMessage = (textPattern) ? `No tags found matching \`${textPattern}\`.` : 'No tags found.';
+      error(message, errorMessage);
+    } else {
+      let successMessage = `**${tags.length}** `;
+      successMessage += (tags.length === 1) ? 'tag found' : 'tags found';
+      successMessage += (textPattern) ? ` matching \`${textPattern}\`:\n` : ':\n';
+      successMessage += tags.map((tag) => tag.name).join(' ');
+      success(message, successMessage);
+    }
   }
 
   async tagExists(message: Message, tagName: string): Promise<ValidationResult> {
