@@ -12,7 +12,7 @@ export default class TimeForCommand extends BlepBotCommand {
 
   usage = 'timefor [user?]';
 
-  description = 'Displays the local time for [user], or your local time if [user] is empty.';
+  description = 'Displays the local time for `[user]`, or your local time if `[user]` is empty.';
 
   arguments = [
     {
