@@ -71,7 +71,7 @@ export default class TimeForCommand extends BlepBotCommand {
   async setTimezone(message: Message, args: string[]): Promise<void> {
     const city = args[0];
     const results = cityTimezones.lookupViaCity(city);
-    if (!results) {
+    if (results.length === 0) {
       return error(message, `Didn't find any cities matching \`${city}\`.`);
     } else if (results.length > 9) {
       return error(message, 'Your search returned 10+ results. Please refine your search.');
