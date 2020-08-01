@@ -25,7 +25,14 @@ export default class BlepBotClient extends Client {
   ready: Promise<void>;
 
   constructor(commandPrefix: string) {
-    super();
+    super({
+      presence: {
+        activity: {
+          name: `${commandPrefix}help`,
+          type: 'LISTENING',
+        },
+      },
+    });
     this.commandPrefix = commandPrefix;
     this.messageHandler = new BlepBotMessageHandler(this);
     this.on('message', (message) => this.messageHandler.handleMessage(message));
