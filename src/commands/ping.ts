@@ -1,5 +1,5 @@
 import { Message } from 'discord.js';
-import Command from '../types/command';
+import { Command } from '../client/internal';
 
 export default class PingCommand extends Command {
     name = 'ping';

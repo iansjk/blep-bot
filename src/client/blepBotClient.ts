@@ -1,22 +1,31 @@
-import Command from 'command';
 import { Client } from 'discord.js';
+import { Db, MongoClient } from 'mongodb';
 import { Trigger } from 'trigger';
-import BlepBotMessageHandler from './blepBotMessageHandler';
+import { BlepBotMessageHandler, Command } from './internal';
 
 export default class BlepBotClient extends Client {
   commandPrefix: string;
 
-  messageHandler: BlepBotMessageHandler;
+  private messageHandler: BlepBotMessageHandler;
 
   commands = new Map<string, Command>();
 
   triggers = new Map<RegExp, Trigger>();
 
+  private mongoClient: MongoClient = new MongoClient(
+    process.env.MONGODB_URI,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    },
+  );
+
+  db: Db;
+
   constructor(commandPrefix: string) {
     super();
     this.commandPrefix = commandPrefix;
     this.messageHandler = new BlepBotMessageHandler(this);
-
     this.on('message', (message) => this.messageHandler.handleMessage(message));
 
     process.on('SIGINT', () => {
@@ -27,6 +36,12 @@ export default class BlepBotClient extends Client {
         command.shutdown();
       });
       process.exit();
+    });
+    this.mongoClient.connect().then((client) => {
+      this.db = client.db(process.env.MONGODB_DBNAME);
+      console.log(`Connected to Mongo database "${this.db.databaseName}"`);
+    }).catch((e) => {
+      throw e;
     });
   }
 

@@ -1,5 +1,6 @@
-import { Message, Client } from 'discord.js';
+import { Client, Message } from 'discord.js';
 import { ValidationResult } from 'validationResult';
+import BlepBotClient from './blepBotClient';
 
 interface Argument {
   name: string,
@@ -27,7 +28,7 @@ export default abstract class Command {
 
   optional? = false;
 
-  constructor(client: Client) {
+  constructor(client: BlepBotClient) {
     this.client = client;
   }
 

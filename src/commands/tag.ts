@@ -1,10 +1,10 @@
-import { Client, Message } from 'discord.js';
+import { Message } from 'discord.js';
 import fs from 'fs';
 import path from 'path';
 import { Tag } from 'tag';
 import { ValidationResult } from 'validationResult';
+import { Command, BlepBotClient } from '../client/internal';
 import { error, success } from '../common';
-import Command from '../types/command';
 
 const tagFilePath = path.join(__dirname, '../data/tags.json');
 
@@ -95,7 +95,7 @@ export default class TagCommand extends Command {
 
   restrictedTagNames = new Set(['help', [...this.subcommands.map((command) => command.name)]]);
 
-  constructor(client: Client) {
+  constructor(client: BlepBotClient) {
     super(client);
     if (fs.existsSync(tagFilePath)) {
       console.debug(`Loading tag data from ${tagFilePath}`);

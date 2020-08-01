@@ -1,13 +1,11 @@
-import { Message, GuildChannel } from 'discord.js';
-import Command from 'command';
-import { error, splitWhitespaceNTimes } from './common';
+import { GuildChannel, Message } from 'discord.js';
+import { error, splitWhitespaceNTimes } from '../common';
+import { Command, BlepBotClient } from './internal';
 
 export default class BlepBotMessageHandler {
-  client: any;
+  client: BlepBotClient;
 
-  // client should be a BlepBotClient
-  // (type set to 'any' due to dependency cycle)
-  constructor(client: any) {
+  constructor(client: BlepBotClient) {
     this.client = client;
   }
 

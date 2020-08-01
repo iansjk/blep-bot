@@ -1,6 +1,6 @@
-import Command from 'command';
+import dotenv from 'dotenv';
 import { Trigger } from 'trigger';
-import BlepBotClient from './blepBotClient';
+import { BlepBotClient, Command } from './client/internal';
 import Commands from './commands/index';
 import Triggers from './triggers/index';
 
