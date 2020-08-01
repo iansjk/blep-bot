@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
-import { ValidationResult } from 'validationResult';
-import BlepBotClient from './blepBotClient';
+import { ValidationResult } from '../types/validation-result';
+import BlepBotClient from './blep-bot-client';
 
 interface Argument {
   name: string,
@@ -9,7 +9,7 @@ interface Argument {
   validator?(message: Message, value: string): ValidationResult | Promise<ValidationResult>
 }
 
-export default abstract class Command {
+export default abstract class BlepBotCommand {
   name: string;
 
   aliases?: string[];
@@ -18,7 +18,7 @@ export default abstract class Command {
 
   description: string;
 
-  subcommands?: Command[];
+  subcommands?: BlepBotCommand[];
 
   arguments?: Argument[];
 

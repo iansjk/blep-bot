@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 import { Collection } from 'mongodb';
 import { Tag } from 'tag';
-import { ValidationResult } from 'validationResult';
+import { ValidationResult } from 'validation-result';
 import { BlepBotClient, Command } from '../client/internal';
 import { success } from '../common';
 

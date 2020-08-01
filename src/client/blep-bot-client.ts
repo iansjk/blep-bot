@@ -1,7 +1,7 @@
 import { Client } from 'discord.js';
 import { Db, MongoClient } from 'mongodb';
 import { Trigger } from 'trigger';
-import { BlepBotMessageHandler, Command } from './internal';
+import { BlepBotMessageHandler, Command, HelpCommand } from './internal';
 
 export default class BlepBotClient extends Client {
   commandPrefix: string;
@@ -49,6 +49,8 @@ export default class BlepBotClient extends Client {
       }).catch((e) => {
         reject(e);
       });
+    }).then(() => {
+      this.loadCommand(HelpCommand);
     });
   }
 
