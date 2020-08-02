@@ -240,27 +240,4 @@ export default class TagCommand extends BlepBotCommand {
       valid: true,
     };
   }
-
-  // encode Map as { dataType: 'Map', value: <array of 2-arrays> }
-  // eslint-disable-next-line class-methods-use-this
-  replacer(_: string, value: any): any {
-    if (value instanceof Map) {
-      return {
-        dataType: 'Map',
-        value: [...value.entries()],
-      };
-    }
-    return value;
-  }
-
-  // decode JSONified Maps produced by replacer()
-  // eslint-disable-next-line class-methods-use-this
-  reviver(_: string, value: any) {
-    if (typeof value === 'object' && value !== null) {
-      if (value.dataType === 'Map') {
-        return new Map(value.value);
-      }
-    }
-    return value;
-  }
 }
