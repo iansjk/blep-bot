@@ -1,5 +1,5 @@
 import { Monster } from 'monster';
-import KinsectExtract from 'kinsectExtract';
+import type { KinsectExtract } from 'kinsectExtract';
 
 export interface Hitzone {
   monster: Monster,

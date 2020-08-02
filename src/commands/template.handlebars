@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    html {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .string-value {
+      text-align: start;
+    }
+
+    th img {
+      display: block;
+      margin: auto;
+    }
+
+    th#part {
+      width: 40%;
+    }
+
+    th,
+    td {
+      padding: 4px;
+      border: 1px solid black;
+    }
+
+    th {
+      border-bottom: 2px solid black;
+    }
+
+    td {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th id="part" class="string-value">Part</th>
+          <th><img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAJNJREFUOE/FktEJwCAMRLuBYzmQi7iBiziQW6S8QiRKI9WffjyM4e4SwUtEXEII8obVDAYLwlKKtNYecs4PnwIQqbHW6pphuMCOGYaLZ04p7QdgjDEup0MvEDFVp2PW83OAnc7amFfrQy/mgP830BD6RwFq5BnghfQCAV9XjbbPJt5TejEbLfS9TQbhCh1wHPCOXDcfoq4vqr1p1QAAAABJRU5ErkJggg==">
+          </th>
+          <th><img
+              src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAIhJREFUOE/NkckNwCAMBNMBxdIIBVEQXTiaSEYby0Q5PnkMke3d5chmZimlFHPiTEmbgHGM8SxAd12hejiZa63We1/CPIZMM7jQayXOZgCF31VF9JxsxvcIYKGIokic4ZsBHvL6DRxPv0L1cCoUxK211KSkTbjaVUmb8I8T6P9ekTbh8wnuYdsO9IqMn1nxn0YAAAAASUVORK5CYII=">
+          </th>
+          <th><img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAIBJREFUOE+tj8ENwCAMA9mA/RmBTdiIXyojURliFWj7OAFOfGqDmX1Chp0Yo4E5Z2QIUKy1Np4kMuTySuICVe4oyfAArwUYniAFpZQ2zDlLeMcJAAY7cGcod7v6f8A7TgAwWAm4DIbyb1+wgjtOkFK6F3Gf3zi54wQ7cGcQnGPhAkDGmQvBEySxAAAAAElFTkSuQmCC">
+          </th>
+          <th><img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAJlJREFUOE+lkNERhCAQQ23jyrANP69X68PNSiRExjvGj+dk4yYDLKWUV4zNsB3fIXcjrH0NuZ08hUE/TIZBExYGmH+VNAFZQ9/PyT8lTdQCBlVPFfAEXuDcCnLAGAGCAnj6NhrOjA5phKU8hXPfDeJhMHrQSzi5WEO4Ct/DS/IzggUMqp4q4AmmCwBLCAo0nDs6jEBA6f+X5QAz1Gc9FLLW5AAAAABJRU5ErkJggg==">
+          </th>
+          <th><img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAJ1JREFUOE+lkIENgEAIA53PdVzFFVzHVRzhpSTV8qB5o0kDVHpBp9Zakj1Wsl+pNv8AEF4Pb2yM7ypl4w8AoWXfHYBKyBvsbiRMETIMQGhet1DpP0HuxlpewPAngA8CYYgzP0f3PZMMs1SEEZj2e4PCsl4DVVdcTTCL8BMkBC/TbCzrz9R5CMALEKIwD10AKYTqw76nQy8s94o7bToBnEW8QWydEcwAAAAASUVORK5CYII=">
+          </th>
+          <th><img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAI5JREFUOE+VjAEOgDAIA/2r7/MrfgkHTTcGI0GTc+tRdomIMT79tZl7vFjYY0n5gImhCLXe3+feMsNqOeIy8Y5hWYqq2HnAl4i66MsHTDgVl3nHCbmmGkK5yjgxmI2q7DMdTgxny5dQyOxzyL1B6YooA9wxp1zTA6flSBKks6ycZXNZyeLHspLFUCTOMnJ9yP9pk7QZrhQAAAAASUVORK5CYII=">
+          </th>
+          <th><img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAI5JREFUOE+tj90NgCAMhJnLdVzLFVzFdXyshfRoKcWggeTS6899CYmIOvHj0s8j9QMendedDbftLlLbSBiagagx4W0/piFqBIAw6jLACKTmBYBdBFEjRzaMEDx6ZEquaYJjeA+tGZg6kFCu8NG36j2MFQ5+A6BlABv+BMiyEB8ue9uMBIgPl50fjBSFiSg99oG7wwNxjQkAAAAASUVORK5CYII=">
+          </th>
+          <th><img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAJVJREFUOE+1jMENgDAMA1mJNfpkjT55sgprsA6rlCbUKE1dBEJUOjVObA8ppU/QJcgvf/wG2kUJyb+OQQbV9maphQkJe4iV9oWauYZikpCdvcZMC1igp2nBG2hBnDcFpjv9bwFMbA7T0i+wRgbCtEBFOYrxSVgzVuiClPTC6vcLXRYzCnphoVkAX+DvgC4FCVn8/SQNB3AySwqn60C8AAAAAElFTkSuQmCC">
+          </th>
+          <th><img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAItJREFUOE+lj1EOwCAIQz3f7rzPncuJWIrIEuM+XqxtIVpqrb/IzWYL0c9YjWY999XZWULRJEA+exzyULjByPYCQZ6OHN/YWtAvVlZwp88uoBil7AVyQls4oKDsRU/mw7TUh2BEC5rpZU4cWJJ9aWuBwLIShwWmAZSPX+CHOcQl1oOIYOgL60GcUcsLzr964+8T5YYAAAAASUVORK5CYII=">
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each hitzoneData }}
+        <tr>
+          <td class="string-value">{{this.part}}</td>
+          <td>{{ hzv this.sever }}</td>
+          <td>{{ hzv this.blunt }}</td>
+          <td>{{ hzv this.shot }}</td>
+          <td>{{ eleHzv this.fire }}</td>
+          <td>{{ eleHzv this.water }}</td>
+          <td>{{ eleHzv this.thunder }}</td>
+          <td>{{ eleHzv this.ice }}</td>
+          <td>{{ eleHzv this.dragon }}</td>
+          <td>{{ eleHzv this.stun }}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>
