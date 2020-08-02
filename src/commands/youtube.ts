@@ -9,7 +9,7 @@ export default class YouTubeCommand extends BlepBotCommand {
 
   usage = 'youtube [search-string]';
 
-  description = 'Searches YouTube for `search-string` and embeds the best match.';
+  description = 'Searches YouTube for `[search-string]` and embeds the best match.';
 
   arguments = [
     {

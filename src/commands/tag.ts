@@ -86,7 +86,7 @@ export default class TagCommand extends BlepBotCommand {
     {
       name: 'search',
       usage: `${this.name} search [text-pattern?]`,
-      description: 'Searches for tags matching `text-pattern`, or displays all tags if `text-pattern` is empty.',
+      description: 'Searches for tags matching `[text-pattern]`, or displays all tags if `[text-pattern]` is empty.',
       execute: this.searchTags,
       arguments: [
         {
