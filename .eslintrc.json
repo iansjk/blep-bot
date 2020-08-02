@@ -20,6 +20,7 @@
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars-experimental": "error",
+        "no-param-reassign": ["error", { "props": false }],
         "import/extensions": [
             "error",
             "ignorePackages",
@@ -47,7 +48,7 @@
         "import/resolver": {
             // use <root>/tsconfig.json
             "typescript": {
-                "alwaysTryTypes": true // always try to resolve types under `<roo/>@types` directory even it doesn't contain any source code, like `@types/unist`
+                "alwaysTryTypes": true // always try to resolve types under `<roo/>@types` directory even it doesn"t contain any source code, like `@types/unist`
             }
         }
     }
