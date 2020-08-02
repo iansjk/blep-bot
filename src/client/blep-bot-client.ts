@@ -45,6 +45,7 @@ export default class BlepBotClient extends Client {
         command.shutdown();
         this.mongoClient.close();
       });
+      this.destroy();
       process.exit();
     });
 
