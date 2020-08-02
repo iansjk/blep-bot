@@ -27,6 +27,7 @@
     "moment-timezone": "^0.5.31",
     "mongodb": "^3.6.0",
     "node-html-to-image": "^3.0.1",
+    "popyt": "^4.1.1",
     "slugify": "^1.4.5"
   },
   "devDependencies": {
