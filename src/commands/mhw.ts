@@ -20,18 +20,33 @@ const FUSE_OPTIONS: Fuse.IFuseOptions<Monster> = {
 };
 const PNG_DIRECTORY = path.join(__dirname, '../data/hzvs');
 const HANDLEBARS_TEMPLATE_FILEPATH = path.join(__dirname, 'template.handlebars');
+const CLUTCH_CLAW_30_OFFSET_MONSTERS = new Set([
+  'Kirin',
+  'Lavasioth',
+  'Uragaan',
+  'Savage Deviljho',
+  'Namielle',
+  'Gold Rathian',
+  'Silver Rathalos',
+]);
 
-function hzvHelper(text: string) {
-  const value = parseInt(text, 10);
+export function rawHzvHelper(hzvText: string, monsterName: string) {
+  const value = parseInt(hzvText, 10);
   if (value === 0) {
     return '-';
-  } else if (value >= 45) {
-    return new Handlebars.SafeString(`<b>${value}</b>`);
   }
-  return value;
+  let offset = 25;
+  if (monsterName === "Safi'jiiva") {
+    offset = 20;
+  } else if (CLUTCH_CLAW_30_OFFSET_MONSTERS.has(monsterName)) {
+    offset = 30;
+  }
+  const postTenderizeValue = Math.floor(value * 0.75 + offset);
+  const formattedHzv = `${value >= 45 ? `<b>${value}</b>` : `${value}`} &rarr; ${postTenderizeValue >= 45 ? `<b>${postTenderizeValue}</b>` : `${postTenderizeValue}`}`;
+  return new Handlebars.SafeString(formattedHzv);
 }
 
-function eleHzvHelper(text: string) {
+export function eleHzvHelper(text: string) {
   const value = parseInt(text, 10);
   if (value === 0) {
     return '-';
@@ -71,7 +86,7 @@ export default class MHWCommand extends BlepBotCommand {
       this.fuse = new Fuse(names, FUSE_OPTIONS);
     });
     // precompile handlebars template
-    Handlebars.registerHelper('hzv', hzvHelper);
+    Handlebars.registerHelper('rawHzv', rawHzvHelper);
     Handlebars.registerHelper('eleHzv', eleHzvHelper);
     const templateRaw = fs.readFileSync(HANDLEBARS_TEMPLATE_FILEPATH, { encoding: 'utf-8' });
     this.template = Handlebars.compile(templateRaw);

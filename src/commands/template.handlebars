@@ -23,7 +23,11 @@
     }
 
     th#part {
-      width: 40%;
+      width: 35%;
+    }
+
+    th.raw-hzv {
+      width: 11%;
     }
 
     th,
@@ -48,13 +52,13 @@
       <thead>
         <tr>
           <th id="part" class="string-value">Part</th>
-          <th><img
+          <th class="raw-hzv"><img
               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAJNJREFUOE/FktEJwCAMRLuBYzmQi7iBiziQW6S8QiRKI9WffjyM4e4SwUtEXEII8obVDAYLwlKKtNYecs4PnwIQqbHW6pphuMCOGYaLZ04p7QdgjDEup0MvEDFVp2PW83OAnc7amFfrQy/mgP830BD6RwFq5BnghfQCAV9XjbbPJt5TejEbLfS9TQbhCh1wHPCOXDcfoq4vqr1p1QAAAABJRU5ErkJggg==">
           </th>
-          <th><img
+          <th class="raw-hzv"><img
               src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAIhJREFUOE/NkckNwCAMBNMBxdIIBVEQXTiaSEYby0Q5PnkMke3d5chmZimlFHPiTEmbgHGM8SxAd12hejiZa63We1/CPIZMM7jQayXOZgCF31VF9JxsxvcIYKGIokic4ZsBHvL6DRxPv0L1cCoUxK211KSkTbjaVUmb8I8T6P9ekTbh8wnuYdsO9IqMn1nxn0YAAAAASUVORK5CYII=">
           </th>
-          <th><img
+          <th class="raw-hzv"><img
               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAIBJREFUOE+tj8ENwCAMA9mA/RmBTdiIXyojURliFWj7OAFOfGqDmX1Chp0Yo4E5Z2QIUKy1Np4kMuTySuICVe4oyfAArwUYniAFpZQ2zDlLeMcJAAY7cGcod7v6f8A7TgAwWAm4DIbyb1+wgjtOkFK6F3Gf3zi54wQ7cGcQnGPhAkDGmQvBEySxAAAAAElFTkSuQmCC">
           </th>
           <th><img
@@ -81,9 +85,9 @@
         {{#each hitzoneData }}
         <tr>
           <td class="string-value">{{this.part}}</td>
-          <td>{{ hzv this.sever }}</td>
-          <td>{{ hzv this.blunt }}</td>
-          <td>{{ hzv this.shot }}</td>
+          <td>{{ rawHzv this.sever this.monster.name }}</td>
+          <td>{{ rawHzv this.blunt this.monster.name }}</td>
+          <td>{{ rawHzv this.shot this.monster.name }}</td>
           <td>{{ eleHzv this.fire }}</td>
           <td>{{ eleHzv this.water }}</td>
           <td>{{ eleHzv this.thunder }}</td>
