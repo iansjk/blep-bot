@@ -15,6 +15,7 @@ export default class BlepBotMessageHandler {
         const commandString = message.content.slice(this.client.commandPrefix.length);
         // eslint-disable-next-line prefer-const
         let [command, argString] = splitWhitespaceNTimes(commandString, 1);
+        command = command.toLowerCase();
         let handler: BlepBotCommand = this.client.commands.get(command);
         let parentHandler: BlepBotCommand;
         if (!handler) {
@@ -24,7 +25,9 @@ export default class BlepBotMessageHandler {
         } else {
           while (handler.subcommands?.length > 0) {
             const [subcommand, subcommandArgString] = splitWhitespaceNTimes(argString, 1);
-            const subcommandIndex = handler.subcommands.map((sc) => sc.name).indexOf(subcommand);
+            const subcommandIndex = handler.subcommands
+              .map((sc) => sc.name)
+              .indexOf(subcommand?.toLowerCase());
             if (subcommandIndex >= 0) {
               parentHandler = handler;
               handler = handler.subcommands[subcommandIndex];
