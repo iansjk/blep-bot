@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars';
-import { rawHzvHelper } from './mhw';
+import { rawHzvHelper, eleHzvHelper, stunHzvHelper } from './mhw';
 
-describe('MHW hitzones command', () => {
+describe('rawHzvHelper', () => {
   it('formats raw hzvs', () => {
     expect(rawHzvHelper('20', 'totally real monster')).toStrictEqual(new Handlebars.SafeString('20 &rarr; 40'));
   });
@@ -27,5 +27,42 @@ describe('MHW hitzones command', () => {
 
   it('bolds wexable hitzones', () => {
     expect(rawHzvHelper('45', 'totally real monster')).toStrictEqual(new Handlebars.SafeString('<b>45</b> &rarr; <b>58</b>'));
+  });
+});
+
+describe('eleHzvHelper', () => {
+  it('colors elemental hitzone values correctly', () => {
+    const breakpoints = [5, 10, 15, 20, 25, 30];
+    const elements = ['fire', 'water', 'thunder', 'ice', 'dragon'];
+    breakpoints.forEach((breakpoint) => {
+      elements.forEach((element) => {
+        if (breakpoint >= 25) {
+          expect(eleHzvHelper(`${breakpoint}`, element)).toStrictEqual(
+            new Handlebars.SafeString(`<td class="${element}-${breakpoint}"><span class="white">${breakpoint}</span></td>`),
+          );
+        } else {
+          expect(eleHzvHelper(`${breakpoint}`, element)).toStrictEqual(
+            new Handlebars.SafeString(`<td class="${element}-${breakpoint}">${breakpoint}</td>`),
+          );
+        }
+      });
+    });
+  });
+
+  it('returns "-" for 0 hitzone values', () => {
+    expect(eleHzvHelper('0', 'fire')).toStrictEqual(
+      new Handlebars.SafeString('<td>-</td>'),
+    );
+  });
+});
+
+describe('stunHzvHelper', () => {
+  it('returns a number', () => {
+    expect(stunHzvHelper('120')).toStrictEqual(120);
+    expect(stunHzvHelper('100')).toStrictEqual(100);
+  });
+
+  it('returns "-" for 0', () => {
+    expect(stunHzvHelper('0')).toStrictEqual('-');
   });
 });

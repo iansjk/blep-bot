@@ -46,12 +46,41 @@ export function rawHzvHelper(hzvText: string, monsterName: string) {
   return new Handlebars.SafeString(formattedHzv);
 }
 
-export function eleHzvHelper(text: string) {
-  const value = parseInt(text, 10);
+export function eleHzvHelper(hzvText: string, element: string) {
+  const value = parseInt(hzvText, 10);
   if (value === 0) {
-    return '-';
+    return new Handlebars.SafeString('<td>-</td>');
   }
-  return text; // TODO
+  let innerClass;
+  let outerClass;
+  if (value >= 30) {
+    outerClass = `${element}-30`;
+    innerClass = 'white';
+  } else if (value >= 25) {
+    outerClass = `${element}-25`;
+    innerClass = 'white';
+  } else if (value >= 20) {
+    outerClass = `${element}-20`;
+  } else if (value >= 15) {
+    outerClass = `${element}-15`;
+  } else if (value >= 10) {
+    outerClass = `${element}-10`;
+  } else if (value >= 5) {
+    outerClass = `${element}-5`;
+  }
+  let toReturn = `<td${outerClass ? ` class="${outerClass}"` : ''}>`;
+  if (innerClass) {
+    toReturn += `<span class="${innerClass}">${value}</span>`;
+  } else {
+    toReturn += value;
+  }
+  toReturn += '</td>';
+  return new Handlebars.SafeString(toReturn);
+}
+
+export function stunHzvHelper(hzvText: string) {
+  const value = parseInt(hzvText, 10);
+  return value === 0 ? '-' : value;
 }
 
 export default class MHWCommand extends BlepBotCommand {
@@ -88,6 +117,7 @@ export default class MHWCommand extends BlepBotCommand {
     // precompile handlebars template
     Handlebars.registerHelper('rawHzv', rawHzvHelper);
     Handlebars.registerHelper('eleHzv', eleHzvHelper);
+    Handlebars.registerHelper('stunHzv', stunHzvHelper);
     const templateRaw = fs.readFileSync(HANDLEBARS_TEMPLATE_FILEPATH, { encoding: 'utf-8' });
     this.template = Handlebars.compile(templateRaw);
   }

@@ -43,6 +43,130 @@
     td {
       text-align: center;
     }
+
+    .fire-5 {
+      background-color: rgb(255, 204, 204);
+    }
+
+    .fire-10 {
+      background-color: rgb(255, 128, 128);
+    }
+
+    .fire-15 {
+      background-color: rgb(255, 51, 51);
+    }
+
+    .fire-20 {
+      background-color: rgb(255, 0, 0);
+    }
+
+    .fire-25 {
+      background-color: rgb(179, 0, 0);
+    }
+
+    .fire-30 {
+      background-color: rgb(128, 0, 0);
+    }
+
+    .water-5 {
+      background-color: rgb(204, 218, 255);
+    }
+
+    .water-10 {
+      background-color: rgb(153, 180, 255);
+    }
+
+    .water-15 {
+      background-color: rgb(76, 124, 255);
+    }
+
+    .water-20 {
+      background-color: rgb(26, 87, 255);
+    }
+
+    .water-25 {
+      background-color: rgb(0, 61, 229);
+    }
+
+    .water-30 {
+      background-color: rgb(0, 41, 153);
+    }
+
+    .ice-5 {
+      background-color: rgb(217, 255, 255);
+    }
+
+    .ice-10 {
+      background-color: rgb(153, 255, 255);
+    }
+
+    .ice-15 {
+      background-color: rgb(76, 255, 255);
+    }
+
+    .ice-20 {
+      background-color: rgb(0, 229, 229);
+    }
+
+    .ice-25 {
+      background-color: rgb(0, 179, 179);
+    }
+
+    .ice-30 {
+      background-color: rgb(0, 128, 128);
+    }
+
+    .thunder-5 {
+      background-color: rgb(255, 255, 220);
+    }
+
+    .thunder-10 {
+      background-color: rgb(255, 255, 160);
+    }
+
+    .thunder-15 {
+      background-color: rgb(255, 255, 0);
+    }
+
+    .thunder-20 {
+      background-color: rgb(204, 204, 0);
+    }
+
+    .thunder-25 {
+      background-color: rgb(153, 153, 0);
+    }
+
+    .thunder-30 {
+      background-color: rgb(102, 102, 0);
+    }
+
+    .dragon-5 {
+      background-color: rgb(229, 204, 255);
+    }
+
+    .dragon-10 {
+      background-color: rgb(204, 153, 255);
+    }
+
+    .dragon-15 {
+      background-color: rgb(179, 102, 255);
+    }
+
+    .dragon-20 {
+      background-color: rgb(153, 51, 255);
+    }
+
+    .dragon-25 {
+      background-color: rgb(127, 0, 255);
+    }
+
+    .dragon-30 {
+      background-color: rgb(89, 0, 179);
+    }
+
+    .white {
+      color: white;
+    }
   </style>
 </head>
 
@@ -88,12 +212,12 @@
           <td>{{ rawHzv this.sever this.monster.name }}</td>
           <td>{{ rawHzv this.blunt this.monster.name }}</td>
           <td>{{ rawHzv this.shot this.monster.name }}</td>
-          <td>{{ eleHzv this.fire }}</td>
-          <td>{{ eleHzv this.water }}</td>
-          <td>{{ eleHzv this.thunder }}</td>
-          <td>{{ eleHzv this.ice }}</td>
-          <td>{{ eleHzv this.dragon }}</td>
-          <td>{{ eleHzv this.stun }}</td>
+          {{ eleHzv this.fire 'fire' }}
+          {{ eleHzv this.water 'water' }}
+          {{ eleHzv this.thunder 'thunder' }}
+          {{ eleHzv this.ice 'ice' }}
+          {{ eleHzv this.dragon 'dragon' }}
+          <td>{{ stunHzv this.stun }}</td>
         </tr>
         {{/each}}
       </tbody>
