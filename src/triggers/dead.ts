@@ -12,7 +12,14 @@ export default class DeadTrigger implements Trigger {
 
   execute(message: Message) {
     const match = this.condition.exec(message.content);
-    const response = `dead${match[1] || ''}er${match[2] || ''}`;
+    let er = match[1] || '';
+    let est = match[2] || '';
+    if (Math.random() <= 0.5) {
+      er += 'er';
+    } else {
+      est += 'est';
+    }
+    const response = `dead${er}${est}`;
     message.channel.send(response);
   }
 }
