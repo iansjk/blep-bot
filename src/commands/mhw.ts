@@ -20,6 +20,10 @@ const FUSE_OPTIONS: Fuse.IFuseOptions<Monster> = {
 };
 const PNG_DIRECTORY = path.join(__dirname, '../data/hzvs');
 const HANDLEBARS_TEMPLATE_FILEPATH = path.join(__dirname, 'template.handlebars');
+const CLUTCH_CLAW_20_OFFSET_MONSTERS = new Set([
+  "Safi'jiiva",
+  'Fatalis'
+]);
 const CLUTCH_CLAW_30_OFFSET_MONSTERS = new Set([
   'Kirin',
   'Lavasioth',
@@ -36,7 +40,7 @@ export function rawHzvHelper(hzvText: string, monsterName: string) {
     return '-';
   }
   let offset = 25;
-  if (monsterName === "Safi'jiiva") {
+  if (CLUTCH_CLAW_20_OFFSET_MONSTERS.has(monsterName)) {
     offset = 20;
   } else if (CLUTCH_CLAW_30_OFFSET_MONSTERS.has(monsterName)) {
     offset = 30;
