@@ -22,7 +22,7 @@
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
     "fuse.js": "^6.4.1",
-    "got": "^11.5.1",
+    "got": "^11.8.5",
     "handlebars": "^4.7.6",
     "moment-timezone": "^0.5.31",
     "mongodb": "^3.6.0",
