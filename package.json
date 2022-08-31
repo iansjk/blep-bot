@@ -24,7 +24,7 @@
     "fuse.js": "^6.4.1",
     "got": "^11.5.1",
     "handlebars": "^4.7.6",
-    "moment-timezone": "^0.5.31",
+    "moment-timezone": "^0.5.35",
     "mongodb": "^3.6.0",
     "node-html-to-image": "^3.0.1",
     "popyt": "^4.1.1",
